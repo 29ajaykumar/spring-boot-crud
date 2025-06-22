@@ -1,0 +1,67 @@
+git clone https://github.com/29ajaykumar/spring-boot-crud.git
+git config --global user.name "29ajaykumar"
+git config --global user.email "ak891142@gmail.com"
+sudo apt install maven
+mvn clean package
+sudo nano /etc/systemd/system/springboot.service
+sudo systemctl daemon-reload
+sudo systemctl status springboot
+sudo chown ubuntu:ubuntu /home/ubuntu/spring-boot-crud/target/spring-boot-crud-0.0.1-SNAPSHOT.jar
+sudo systemctl daemon-reload
+sudo systemctl status springboot
+sudo -u ubuntu java -jar /home/ubuntu/spring-boot-crud/target/spring-boot-crud-0.0.1-SNAPSHOT.jar
+
+
+
+
+################springboot.service############
+
+[Unit]
+Description=Spring Boot Application
+After=syslog.target
+
+[Service]
+User=ubuntu
+ExecStart=/usr/bin/java -jar /home/ubuntu/spring-boot-crud/target/spring-boot-crud-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+Environment="JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64"
+
+[Install]
+WantedBy=multi-user.target
+
+
+or
+
+
+
+[Unit]
+Description=Spring Boot Application
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/spring-boot-crud
+ExecStart=/usr/bin/java -Xms256m -Xmx512m -jar /home/ubuntu/spring-boot-crud/target/spring-boot-crud-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+Environment="JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64"
+Environment="SPRING_PROFILES_ACTIVE=prod"
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+##############Start/Restart the Service############
+
+sudo systemctl daemon-reload
+sudo systemctl enable springboot
+sudo systemctl start springboot
+
+
+#############Verify Again#############
+
+sudo systemctl status springboot
